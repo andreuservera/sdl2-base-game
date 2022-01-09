@@ -6,6 +6,7 @@ Game::Game()
     renderer = nullptr;
     screenWidth = 1024;
     screenHeight = 600;
+    isFullScreen = false;
     gameState = GameState::PLAY;
 }
 
@@ -50,6 +51,33 @@ void Game::handleEvents()
                 case SDLK_ESCAPE:
                     gameState = GameState::EXIT;
                     break;
+                case SDLK_F11:
+                    ToggleFullScreen();
+                    break;
             }
     }    
+}
+
+void Game::ToggleFullScreen()
+{
+//    SDL_DisplayMode dm;
+//    if(SDL_GetDesktopDisplayMode(0, &dm) != 0)
+//    {
+//        SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
+//        return 1;
+//    }
+//    
+//    if()
+    if(isFullScreen)
+    {
+        SDL_SetWindowFullscreen(window, 0);
+        SDL_SetWindowSize(window, screenWidth, screenHeight);
+        SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    }
+    else
+    {
+        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); 
+    }
+
+    isFullScreen = !isFullScreen;
 }

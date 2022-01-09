@@ -23,6 +23,9 @@ class Game {
 
         int screenWidth;
         int screenHeight;
+        bool isFullScreen;
 
         GameState gameState;
+
+        void ToggleFullScreen();
 };
