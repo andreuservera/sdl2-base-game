@@ -5,7 +5,7 @@ CFLAGS += -std=c11 -Wpedantic -Wall -Wextra -Wmissing-prototypes -Wstrict-protot
 CFLAGS += -fsanitize=address -fno-omit-frame-pointer -g
 # CFLAGS += -O2 -DNDEBUG
 CFLAGS += `sdl2-config --cflags` -MMD
-LDFLAGS = `sdl2-config --libs` -lSDL2_image -lm
+LDFLAGS = `sdl2-config --libs` -lSDL2_image #-lm
 OBJECTS = \
     game.o main.o
 

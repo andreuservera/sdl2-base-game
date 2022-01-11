@@ -11,12 +11,12 @@ class Game {
         Game();
         ~Game();
 
-        void run();
+        void Run();
 
     private:
-        void init(const char* title, int x, int y, int w, int h, Uint32 flags);
-        void gameLoop();
-        void handleEvents();
+        bool Init(const char* title, int x, int y, int w, int h, Uint32 flags);
+        void GameLoop();
+        void HandleEvents();
 
         SDL_Window* window;
         SDL_Renderer* renderer;
@@ -28,4 +28,10 @@ class Game {
         GameState gameState;
 
         void ToggleFullScreen();
+        void RenderGame();
+        void LoadResources();
+
+        SDL_Texture* LoadTexture(std::string path);
+
+        SDL_Texture* sprite;
 };

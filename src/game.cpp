@@ -8,33 +8,57 @@ Game::Game()
     screenHeight = 600;
     isFullScreen = false;
     gameState = GameState::PLAY;
+
+    sprite = NULL;
 }
 
 Game::~Game() {}
 
-void Game::run() 
+void Game::Run() 
 {
-    init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
-    gameLoop();
+    Init("Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, screenWidth, screenHeight, SDL_WINDOW_SHOWN);
+    GameLoop();
 }
 
-void Game::init(const char* title, int x, int y, int w, int h, Uint32 flags) 
+bool Game::Init(const char* title, int x, int y, int w, int h, Uint32 flags) 
 {
     SDL_Init(SDL_INIT_EVERYTHING);
 
     window = SDL_CreateWindow(title, x, y, w, h, flags);
+    if(window == NULL)
+    {
+        printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+        return false;
+    }
+    
     renderer = SDL_CreateRenderer(window, -1, 0);
+    if(renderer == NULL)
+    {
+        printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        return false;
+    }
+
+    int imgFlags = IMG_INIT_PNG;
+    if( !(IMG_Init(imgFlags) & imgFlags) )
+    {
+        printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+        return false;
+    }
+
+    LoadResources();
+    return true;
 }
 
-void Game::gameLoop() 
+void Game::GameLoop() 
 {
     while (gameState != GameState::EXIT) 
     {
-        handleEvents();
+        HandleEvents();
+        RenderGame();
     }
 }
 
-void Game::handleEvents() 
+void Game::HandleEvents() 
 {
     SDL_Event sdl_event;
     SDL_PollEvent(&sdl_event);
@@ -80,4 +104,44 @@ void Game::ToggleFullScreen()
     }
 
     isFullScreen = !isFullScreen;
+}
+
+SDL_Texture* Game::LoadTexture(std::string path)
+{
+    SDL_Texture* newTexture = NULL;
+
+    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    if(loadedSurface == NULL)
+    {
+        printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
+        return NULL;
+    }
+    
+    newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
+    if(newTexture == NULL)
+    {
+        printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+        return NULL;
+    }
+
+    SDL_FreeSurface(loadedSurface);
+
+    return newTexture;
+}
+
+void Game::LoadResources()
+{
+    sprite = LoadTexture("..resources/sprite.png");
+    if(sprite == NULL)
+    {
+        printf("Failed to load image!\n");
+        return;
+    }
+}
+
+void Game::RenderGame()
+{
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, sprite, NULL, NULL);
+    SDL_RenderPresent(renderer);
 }
