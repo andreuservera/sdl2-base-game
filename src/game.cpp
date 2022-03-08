@@ -1,4 +1,5 @@
 #include "game.h"
+#include "ResourceManager.h"
 
 Game::Game() 
 {
@@ -8,8 +9,6 @@ Game::Game()
     screenHeight = 600;
     isFullScreen = false;
     gameState = GameState::PLAY;
-
-    sprite = NULL;
 }
 
 Game::~Game() {}
@@ -84,14 +83,6 @@ void Game::HandleEvents()
 
 void Game::ToggleFullScreen()
 {
-//    SDL_DisplayMode dm;
-//    if(SDL_GetDesktopDisplayMode(0, &dm) != 0)
-//    {
-//        SDL_Log("SDL_GetDesktopDisplayMode failed: %s", SDL_GetError());
-//        return 1;
-//    }
-//    
-//    if()
     if(isFullScreen)
     {
         SDL_SetWindowFullscreen(window, 0);
@@ -106,42 +97,21 @@ void Game::ToggleFullScreen()
     isFullScreen = !isFullScreen;
 }
 
-SDL_Texture* Game::LoadTexture(std::string path)
-{
-    SDL_Texture* newTexture = NULL;
-
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
-    if(loadedSurface == NULL)
-    {
-        printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-        return NULL;
-    }
-    
-    newTexture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-    if(newTexture == NULL)
-    {
-        printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-        return NULL;
-    }
-
-    SDL_FreeSurface(loadedSurface);
-
-    return newTexture;
-}
-
 void Game::LoadResources()
 {
-    sprite = LoadTexture("..resources/sprite.png");
-    if(sprite == NULL)
-    {
-        printf("Failed to load image!\n");
-        return;
-    }
+    std::string filepath = "../resources/sprite.png";
+    sprite.reset(new Bitmap(filepath, renderer));
 }
 
 void Game::RenderGame()
 {
+    SDL_Rect dstrect = sprite->GetRect();
+
+    sprite->SetDimensions(50, 50);
+
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, sprite, NULL, NULL);
+    SDL_RenderCopy(renderer, sprite->GetTexture(), NULL, &dstrect);
     SDL_RenderPresent(renderer);
+
+    sprite->SetPosition(sprite->GetRect().x+1, 0);
 }

@@ -1,8 +1,10 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Bitmap.h"
 
 enum class GameState {PLAY, EXIT};
 
@@ -31,7 +33,5 @@ class Game {
         void RenderGame();
         void LoadResources();
 
-        SDL_Texture* LoadTexture(std::string path);
-
-        SDL_Texture* sprite;
+        std::unique_ptr<Bitmap> sprite;
 };
