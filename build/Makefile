@@ -7,7 +7,7 @@ CFLAGS += -fsanitize=address -fno-omit-frame-pointer -g
 CFLAGS += `sdl2-config --cflags` -MMD
 LDFLAGS = `sdl2-config --libs` -lSDL2_image #-lm
 OBJECTS = \
-    game.o main.o ResourceManager.o Bitmap.o
+    game.o main.o ResourceManager.o Bitmap.o rocket.o
 
 all: Main
 

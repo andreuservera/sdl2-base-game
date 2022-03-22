@@ -1,12 +1,15 @@
 #include "game.h"
 #include "ResourceManager.h"
 
+const int SCREEN_WIDTH_SMALL = 1024;
+const int SCREEN_HEIGHT_SMALL = 600;
+
 Game::Game() 
 {
     window = nullptr;
     renderer = nullptr;
-    screenWidth = 1024;
-    screenHeight = 600;
+    screenWidth = SCREEN_WIDTH_SMALL;
+    screenHeight = SCREEN_HEIGHT_SMALL;
     isFullScreen = false;
     gameState = GameState::PLAY;
 }
@@ -30,7 +33,7 @@ bool Game::Init(const char* title, int x, int y, int w, int h, Uint32 flags)
         return false;
     }
     
-    renderer = SDL_CreateRenderer(window, -1, 0);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     if(renderer == NULL)
     {
         printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -85,13 +88,17 @@ void Game::ToggleFullScreen()
 {
     if(isFullScreen)
     {
+        screenWidth = SCREEN_WIDTH_SMALL;
+        screenHeight = SCREEN_HEIGHT_SMALL;
+
         SDL_SetWindowFullscreen(window, 0);
         SDL_SetWindowSize(window, screenWidth, screenHeight);
         SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
     else
     {
-        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN); 
+        SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP); 
+        SDL_GetWindowSize(window, &screenWidth, &screenHeight);
     }
 
     isFullScreen = !isFullScreen;
@@ -107,7 +114,7 @@ void Game::RenderGame()
 {
     SDL_Rect dstrect = sprite->GetRect();
 
-    sprite->SetDimensions(50, 50);
+    //sprite->SetDimensions(50, 50);
 
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, sprite->GetTexture(), NULL, &dstrect);
