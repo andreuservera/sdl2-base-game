@@ -13,6 +13,8 @@ class Rocket
         void Update();
         void HandleEvents();
         void Render(SDL_Renderer* renderer);
+
+        void SetPosition(int x, int y);
         
     private:
         int m_pos_x;

@@ -62,3 +62,9 @@ void Rocket::Render(SDL_Renderer* renderer)
 
     SDL_RenderCopy(renderer, sprite->GetTexture(), NULL, &dstrect);
 }
+
+void Rocket::SetPosition(int x, int y)
+{
+    m_pos_x = x;
+    m_pos_y = y;
+}

@@ -65,7 +65,10 @@ void Game::HandleEvents()
     SDL_Event sdl_event;
     SDL_PollEvent(&sdl_event);
 
-    rocket->HandleEvents();
+    for (auto& r : rockets)
+    {
+        r.HandleEvents();
+    }
 
     switch (sdl_event.type) 
     {
@@ -108,26 +111,24 @@ void Game::ToggleFullScreen()
 
 void Game::LoadResources()
 {
-    //#ifdef __linux__
-    //std::string filepath = "../resources/sprite.png";
-    //#elif _WIN32
-    //std::string filepath = "..\\resources\\sprit.png";
-    //#endif
+    for (size_t i = 0; i < 2; i++)
+    {
+        Rocket* r = new Rocket(renderer, 0, 0);
+        rockets.push_back(*r);
+    }
 
-    rocket.reset(new Rocket(renderer, 0, 0));
+    rockets[1].SetPosition(40, 40);
 }
 
 void Game::RenderGame()
 {
-    //SDL_Rect dstrect = rocket->GetRect();
-
-    //sprite->SetDimensions(50, 50);
-
     SDL_RenderClear(renderer);
-    //SDL_RenderCopy(renderer, sprite->GetTexture(), NULL, &dstrect);
-    rocket->Update();
-    rocket->Render(renderer);
-    SDL_RenderPresent(renderer);
 
-    //sprite->SetPosition(sprite->GetRect().x+1, 0);
+    for (auto& r : rockets)
+    {
+        r.Update();
+        r.Render(renderer);
+    }
+
+    SDL_RenderPresent(renderer);
 }

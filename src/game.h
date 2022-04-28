@@ -36,5 +36,5 @@ class Game {
         void RenderGame();
         void LoadResources();
 
-        std::unique_ptr<Rocket> rocket;
+        std::vector<Rocket> rockets;
 };
