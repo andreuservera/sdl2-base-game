@@ -1,8 +1,12 @@
 #pragma once
 
 #include <iostream>
+#include <memory>
+#include <vector>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Bitmap.h"
+#include "rocket.h"
 
 enum class GameState {PLAY, EXIT};
 
@@ -17,6 +21,7 @@ class Game {
         bool Init(const char* title, int x, int y, int w, int h, Uint32 flags);
         void GameLoop();
         void HandleEvents();
+        void PhysicsLoop();
 
         SDL_Window* window;
         SDL_Renderer* renderer;
@@ -31,7 +36,5 @@ class Game {
         void RenderGame();
         void LoadResources();
 
-        SDL_Texture* LoadTexture(std::string path);
-
-        SDL_Texture* sprite;
+        std::unique_ptr<Rocket> rocket;
 };

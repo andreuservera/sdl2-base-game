@@ -1,3 +1,5 @@
-.vscode/
-build/*.o
-build/Main
+/src/include/*
+/src/lib/*
+/build/*
+/.vscode/*
+desktop.ini
