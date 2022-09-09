@@ -1,0 +1,33 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Configure",
+            "type": "shell",
+            "command": "rm -rf build && mkdir build && cd build && cmake ..",
+            "args": []
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "dependsOn": "Configure",
+            "command": "cd build && make",
+            "args": []
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "cd bin && ./Game",
+            "args": [],
+            "problemMatcher": []
+        },
+        {
+            "label": "Build & Run",
+            "type": "shell",
+            "dependsOn": "Build",
+            "command": "cd bin && ./Game",
+            "args": [],
+            "problemMatcher": []
+        }
+    ]
+}
