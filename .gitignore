@@ -1,3 +1,5 @@
 build
 bin
 Makefile
+SDL
+SDL_image
